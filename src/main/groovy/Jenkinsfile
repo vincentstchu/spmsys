@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+    tools {
+        maven 'maven'
+        jdk 'jdk8'
+    }
+    stages {
+        stage('Initialize') {
+            steps {
+                sh 'echo Initializing......'
+                sh '''
+                echo "PATH=${PATH}"
+                echo "M2_HOME=${M2_HOME}"
+                '''
+            }
+        }
+        stage('Check out') {
+            steps {
+                sh 'echo Checking out......'
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '9042ea66-c861-488b-83da-cdeaf2102488', url: 'https://github.com/vincentstchu/gs-rest-service.git']]])
+            }
+        }
+        stage('Maven build') {
+            steps {
+                sh 'echo Building......'
+                sh 'mvn clean compile'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'echo Test'
+                sh 'mvn test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'echo Deploying......'
+
+            }
+
+        }
+    }
+}
