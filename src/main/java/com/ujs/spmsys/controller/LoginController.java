@@ -30,19 +30,20 @@ public class LoginController {
     }
     @RequestMapping("/researchers")
     public Result rLogin(
-            @RequestParam(name="reid") Integer id,
+            @RequestParam(name="rename") String name,
             @RequestParam(name="repasswd") String passwd
-    ) {
-        logger.info(id.toString());
+    ) throws NullPointerException{
+        logger.info(name);
         logger.info(passwd);
-        Reseacher reseacher = reseacherService.findById(id);
         Result result = new Result();
-        if(reseacherService.findById(id).getPasswd().equals(passwd)) {
-            result.setCode(ResultCode.SUCCESS);
-           result.setData(reseacher);
-            result.setMessage("login successful!");
-            return result;
-        }
+        if(reseacherService.findByName(name)!=null)
+            if(reseacherService.findByName(name).getPasswd().equals(passwd)) {
+                Reseacher reseacher = reseacherService.findByName(name);
+                result.setCode(ResultCode.SUCCESS);
+                result.setData(reseacher);
+                result.setMessage("login successful!");
+                return result;
+            }
         result.setCode(ResultCode.FAIL);
         result.setMessage("Failed!");
         return result;
