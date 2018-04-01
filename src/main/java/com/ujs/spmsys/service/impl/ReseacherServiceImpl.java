@@ -13,44 +13,32 @@ import java.util.List;
 @Service
 public class ReseacherServiceImpl implements ReseacherService{
 
-    @Override
-    public void save(Reseacher model) {
-
-    }
+    @Autowired
+    ReseacherMapper reseacherMapper;
 
     @Override
-    public void save(List<Reseacher> models) {
-
+    public void save(Reseacher entity) {
+        reseacherMapper.insert(entity);
     }
 
     @Override
     public void deleteById(Integer id) {
-
+        reseacherMapper.deleteByPrimaryKey(id);
     }
 
     @Override
-    public void deleteByIds(String ids) {
-
+    public void update(Reseacher entity) {
+        reseacherMapper.updateByPrimaryKeySelective(entity);
     }
 
     @Override
-    public void update(Reseacher model) {
-
+    public List<Reseacher> findAll() {
+        return null;
     }
 
     @Override
     public Reseacher findById(Integer id) {
-        return null;
-    }
-
-    @Override
-    public Reseacher findBy(String fieldName, Object value) throws TooManyResultsException {
-        return null;
-    }
-
-    @Override
-    public List<Reseacher> findByIds(String ids) {
-        return null;
+        return reseacherMapper.selectByPrimaryKey(id);
     }
 
     @Override
@@ -59,7 +47,7 @@ public class ReseacherServiceImpl implements ReseacherService{
     }
 
     @Override
-    public List<Reseacher> findAll() {
-        return null;
+    public Reseacher findByName(String name) {
+        return reseacherMapper.findByName(name);
     }
 }
