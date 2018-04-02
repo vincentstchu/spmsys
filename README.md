@@ -1,4 +1,4 @@
-# spmsys 科研项目管理系统 #
+# spmsys 科研项目管理系统(可部署到外部tomcat版本) #
 ## Course design ##
 **********
 + 打包成war并部署到tomcat  
