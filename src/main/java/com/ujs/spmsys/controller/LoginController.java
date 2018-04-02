@@ -7,8 +7,8 @@ package com.ujs.spmsys.controller;
  */
 import com.ujs.spmsys.core.Result;
 import com.ujs.spmsys.core.ResultCode;
-import com.ujs.spmsys.entity.Reseacher;
-import com.ujs.spmsys.service.impl.ReseacherServiceImpl;
+import com.ujs.spmsys.entity.Researcher;
+import com.ujs.spmsys.service.impl.ResearcherServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/login")
 public class LoginController {
     @Autowired
-    ReseacherServiceImpl reseacherService;
+    ResearcherServiceImpl researcherService;
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
     @RequestMapping("/hello")
     public Result hello(){
@@ -36,9 +36,9 @@ public class LoginController {
         logger.info(name);
         logger.info(passwd);
         Result result = new Result();
-        if(reseacherService.findByName(name)!=null)
-            if(reseacherService.findByName(name).getPasswd().equals(passwd)) {
-                Reseacher reseacher = reseacherService.findByName(name);
+        if(researcherService.findByName(name)!=null)
+            if(researcherService.findByName(name).getPasswd().equals(passwd)) {
+                Researcher reseacher = researcherService.findByName(name);
                 result.setCode(ResultCode.SUCCESS);
                 result.setData(reseacher);
                 result.setMessage("login successful!");

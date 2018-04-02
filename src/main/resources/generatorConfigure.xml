@@ -30,7 +30,7 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table schema="spmsysdb" tableName="reseacher" domainObjectName="Reseacher"
+        <table schema="spmsysdb" tableName="researcher" domainObjectName="Researcher"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false">
