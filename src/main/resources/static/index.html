@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Flat Login Form 3.0</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+
+    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900|RobotoDraft:400,100,300,500,700,900'>
+    <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+
+    <link rel="stylesheet" href="css/style.css">
+
+
+</head>
+
+<body>
+<div class="pen-title">
+    <h1>用户登录</h1>
+    <span>SPM system</span>
+</div>
+<!-- Form Module-->
+<div class="module form-module">
+    <div class="toggle">
+        <i class="fa fa-times fa-pencil"></i>
+        <div class="tooltip">Click Me</div>
+    </div>
+    <div id="app_login" class="form">
+        <!-- <h2>{{message}}</h2>
+        <p>{{message}}</p> -->
+        <form v-on:submit.prevent="onSubmit">
+            <input type="text" placeholder="Username" v-model.trim="inputtext.username" />
+            <input type="password" placeholder="Password" v-model.trim="inputtext.password" />
+            <button type="submit">Login</button>
+        </form>
+    </div>
+    <div class="form">
+        <h2>Create an account</h2>
+        <form>
+            <input type="text" placeholder="Username" />
+            <input type="password" placeholder="Password" />
+            <input type="email" placeholder="Email Address" />
+            <input type="tel" placeholder="Phone Number" />
+            <button>Register</button>
+        </form>
+    </div>
+    <!-- <div class="cta"><a href="http://andytran.me">Forgot your password?</a></div> -->
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+
+</html>
+
+<script>
+    var app_login = new Vue({
+        el: '#app_login',
+        data: {
+            // message: 'Hello Vue.js!',
+            inputtext:{
+                username: null,
+                password: null
+            }
+        },
+        methods: {
+            onSubmit: function () {
+                console.log("username:" + this.username + " password:" + this.password);
+                console.log(this.inputtext);
+                axios({
+
+                    method: 'post',
+                    // url: 'http://120.78.135.143/spmsys-0.0.1-SNAPSHOT/login/researchers',
+                    url: 'http://localhost:8080/login/researchers',
+                    data: {
+                        rename : this.inputtext.username,
+                        repasswd : this.inputtext.password
+                    },
+                    transformRequest: [function (data) {
+                        // Do whatever you want to transform the data
+                        let ret = ''
+                        for (let it in data) {
+                            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+                        }
+                        return ret
+                    }],
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+
+                }).then(function (response) {
+                    console.log(response.data);
+                })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+        }
+    })
+</script>
