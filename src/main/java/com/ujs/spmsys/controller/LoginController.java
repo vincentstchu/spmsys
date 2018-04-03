@@ -21,20 +21,15 @@ public class LoginController {
     @Autowired
     ResearcherServiceImpl researcherService;
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
-    @RequestMapping("/hello")
-    public Result hello(){
-        Result result = new Result();
-        result.setCode(ResultCode.FAIL);
-        result.setMessage("Failed!");
-        return result;
-    }
     @RequestMapping("/researchers")
+    @ResponseBody
     public Result rLogin(
-            @RequestParam(name="rename") String name,
-            @RequestParam(name="repasswd") String passwd
+            @RequestBody Researcher reqResearcher
     ) throws NullPointerException{
-        logger.info(name);
-        logger.info(passwd);
+        logger.info(reqResearcher.getName());
+        logger.info(reqResearcher.getPasswd());
+        String name = reqResearcher.getName();
+        String passwd = reqResearcher.getPasswd();
         Result result = new Result();
         if(researcherService.findByName(name)!=null)
             if(researcherService.findByName(name).getPasswd().equals(passwd)) {
