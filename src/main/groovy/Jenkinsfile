@@ -23,7 +23,7 @@ pipeline {
         stage('Maven build') {
             steps {
                 sh 'echo Building......'
-                sh 'mvn clean compile'
+                sh 'mvn clean package'
             }
         }
         stage('Test') {
