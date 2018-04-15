@@ -13,7 +13,7 @@ var app_login = new Vue({
 
                 method: 'post',
                 // url: 'http://120.78.135.143/spmsys-0.0.1-SNAPSHOT/login/researchers',
-                url: 'http://localhost/login/researchers',
+                url: 'http://localhost:8080/researchers/login',
                 data: {
                     id : null,
                     name : this.inputtext.username,
