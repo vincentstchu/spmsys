@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
 
 //注意Controller类型
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/researchers")
 public class LoginController {
     @Autowired
     ResearcherServiceImpl researcherService;
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
-    @RequestMapping("/researchers")
+    @PostMapping("/login")
     @ResponseBody
     public Result rLogin(
             @RequestBody Researcher reqResearcher
@@ -42,6 +42,27 @@ public class LoginController {
         result.setCode(ResultCode.FAIL);
         result.setMessage("Failed!");
         return result;
+    }
+    @RequestMapping("/register")
+    @ResponseBody
+    public Result rRegister(
+            @RequestBody Researcher regResearcher
+    ) {
+        logger.info(regResearcher.getName());
+        logger.info(regResearcher.getPasswd());
+        String name = regResearcher.getName();
+        Result result = new Result();
+        if(researcherService.findByName(name)!=null) {
+            logger.info("failed");
+            result.setCode(ResultCode.FAIL);
+            result.setMessage("Same name");
+        } else {
+            researcherService.save(regResearcher);
+            result.setCode(ResultCode.SUCCESS);
+            result.setData(regResearcher);
+            result.setMessage("Regist successfully!");
+        }
+        return null;
     }
 
 }
