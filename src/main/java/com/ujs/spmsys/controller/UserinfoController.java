@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
  * Time: 上午10:46
  */
 @RestController
-//@RequestMapping("/userinfo")
 public class UserinfoController {
     @Autowired
     UserinfoServiceImpl userinfoService;
@@ -43,9 +42,6 @@ public class UserinfoController {
             result.setCode(ResultCode.SUCCESS);
             result.setMessage("create userinfo successfully!");
         }
-//        logger.info("failed");
-//        result.setCode(ResultCode.FAIL);
-//        result.setMessage("error already exists!");
         return result;
     }
     @GetMapping("/userinfo")
