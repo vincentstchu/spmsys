@@ -37,16 +37,35 @@ public class CrosProjectController {
         return result;
     }
 
+    @GetMapping("/crosproj/status")
+    @ResponseBody
+    public Result getCrosprojByStatus(
+            @RequestParam Integer status
+    ) {
+        List projects = new ArrayList<Crossproject>();
+        Result result = new Result();
+        if(resCrosProjectService.findAllByStatus(status)!=null)
+        {
+            projects=resCrosProjectService.findAllByStatus(status);
+            result.setCode(ResultCode.SUCCESS);
+            result.setData(projects);
+            result.setMessage("Success!");
+            return result;
+        }
+        result.setData(ResultCode.FAIL);
+        return result;
+    }
+
     @PostMapping("/crosproj")
     @ResponseBody
     public Result createCrosproj(
             @RequestBody Crossproject crossproject
             ) {
         Result result = new Result();
-        if( resCrosProjectService.findById(crossproject.getId()) == null ) {
+        if( resCrosProjectService.findAllByName(crossproject.getName()) == null ) {
             resCrosProjectService.save(crossproject);
             result.setCode(ResultCode.SUCCESS);
-            result.setData(crossproject);
+            result.setData(resCrosProjectService.findAllByName(crossproject.getName()));
             result.setMessage("Create crosproj success!");
             return result;
         }
@@ -74,13 +93,16 @@ public class CrosProjectController {
             @RequestBody Crosappform crosappform
             ) {
         Result result = new Result();
-//        if( resCrosProjectService.findById(crosappform.getId()) == null ) {
-//            resCrosProjectService.save(crosappform);
-//            result.setCode(ResultCode.SUCCESS);
-//            result.setData(crossproject);
-//            result.setMessage("Create crosproj success!");
-//            return result;
-//        }
+        if( resCrosProjectService.findByFormId(crosappform.getProjectid()) == null ){
+            resCrosProjectService.saveForm(crosappform);
+            Crossproject crossproject = resCrosProjectService.findById(crosappform.getProjectid());
+            crossproject.setStatus(1);
+            resCrosProjectService.update(crossproject);
+            result.setCode(ResultCode.SUCCESS);
+            result.setData(crosappform);
+            result.setMessage("Create crosappform success!");
+            return result;
+        }
         result.setCode(ResultCode.FAIL);
         return result;
     }

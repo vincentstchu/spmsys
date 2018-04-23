@@ -5,5 +5,6 @@ import com.ujs.spmsys.entity.Crossproject;
 import java.util.List;
 
 public interface ResCrosProjectService extends CommonService<Crossproject> {
-    public List<Crossproject> findAllByAuthorName(String name);
+    List<Crossproject> findAllByAuthorName(String name);
+    Crossproject findAllByName(String name);
 }

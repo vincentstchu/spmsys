@@ -57,4 +57,8 @@ public interface CrossprojectMapper {
     int updateByPrimaryKey(Crossproject record);
 
     List<Crossproject> selectByAuthorname(String name);
+
+    Crossproject selectByName(String name);
+
+    List<Crossproject> selectByStatus(Integer status);
 }

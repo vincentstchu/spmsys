@@ -1,6 +1,8 @@
 package com.ujs.spmsys.service.impl;
 
+import com.ujs.spmsys.dao.CrosappformMapper;
 import com.ujs.spmsys.dao.CrossprojectMapper;
+import com.ujs.spmsys.entity.Crosappform;
 import com.ujs.spmsys.entity.Crossproject;
 import com.ujs.spmsys.service.ResCrosProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ public class ResCrosProjectServiceImpl implements ResCrosProjectService {
 
     @Autowired
     CrossprojectMapper crossprojectMapper;
+    @Autowired
+    CrosappformMapper crosappformMapper;
 
     @Override
     public void save(Crossproject entity) {
@@ -27,7 +31,7 @@ public class ResCrosProjectServiceImpl implements ResCrosProjectService {
 
     @Override
     public void update(Crossproject model) {
-
+        crossprojectMapper.updateByPrimaryKey(model);
     }
 
     @Override
@@ -48,5 +52,21 @@ public class ResCrosProjectServiceImpl implements ResCrosProjectService {
     @Override
     public List<Crossproject> findAllByAuthorName(String name) {
         return crossprojectMapper.selectByAuthorname(name);
+    }
+
+    @Override
+    public Crossproject findAllByName(String name) {
+        return crossprojectMapper.selectByName(name);
+    }
+
+    public void saveForm(Crosappform crosappform) {
+        crosappformMapper.insert(crosappform);
+    }
+    public Crosappform findByFormId(Integer id) {
+        return crosappformMapper.selectByPrimaryKey(id);
+    }
+
+    public List<Crossproject> findAllByStatus(Integer status) {
+        return crossprojectMapper.selectByStatus(status);
     }
 }

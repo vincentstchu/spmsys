@@ -62,4 +62,23 @@ public class UserinfoController {
         return result;
     }
 
+    @PutMapping("/userinfo")
+    @ResponseBody
+    public Result updateUserinfo(
+            @RequestBody Userinfo userinfo
+    ) {
+        logger.info("update userinfo");
+        Result result = new Result();
+        if(userinfoService.findById(userinfo.getAccountid())!=null) {
+            userinfoService.update(userinfo);
+            result.setCode(ResultCode.SUCCESS);
+            result.setData(userinfo);
+            result.setMessage("Userinfo is successfully updated");
+        } else {
+            result.setCode(ResultCode.NOT_FOUND);
+            result.setMessage("Userinfo is not found");
+        }
+        return result;
+    }
+
 }

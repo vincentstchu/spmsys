@@ -36,6 +36,14 @@
       select  * from crossproject
       where authorname = #{name}
     </select>
+    <select id="selectByName" resultType="com.ujs.spmsys.entity.Crossproject">
+      select * from crossproject
+      where name = #{name}
+    </select>
+    <select id="selectByStatus" parameterType="java.lang.Integer" resultType="com.ujs.spmsys.entity.Crossproject">
+      select * from crossproject
+      where status = #{status}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
       WARNING - @mbg.generated
