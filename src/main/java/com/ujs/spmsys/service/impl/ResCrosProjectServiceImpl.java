@@ -1,9 +1,13 @@
 package com.ujs.spmsys.service.impl;
 
 import com.ujs.spmsys.dao.CrosappformMapper;
+import com.ujs.spmsys.dao.CrossappfileMapper;
 import com.ujs.spmsys.dao.CrossprojectMapper;
+import com.ujs.spmsys.dao.FileMapper;
 import com.ujs.spmsys.entity.Crosappform;
+import com.ujs.spmsys.entity.Crossappfile;
 import com.ujs.spmsys.entity.Crossproject;
+import com.ujs.spmsys.entity.File;
 import com.ujs.spmsys.service.ResCrosProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,8 @@ public class ResCrosProjectServiceImpl implements ResCrosProjectService {
     CrossprojectMapper crossprojectMapper;
     @Autowired
     CrosappformMapper crosappformMapper;
+    @Autowired
+    CrossappfileMapper crossappfileMapper;
 
     @Override
     public void save(Crossproject entity) {
@@ -27,6 +33,12 @@ public class ResCrosProjectServiceImpl implements ResCrosProjectService {
     @Override
     public void deleteById(Integer id) {
         crossprojectMapper.deleteByPrimaryKey(id);
+        if(crosappformMapper.selectByPrimaryKey(id) != null) {
+            crosappformMapper.deleteByPrimaryKey(id);
+        }
+        if(crossappfileMapper.selectByPrimaryKey(id) !=null) {
+            crossappfileMapper.deleteByPrimaryKey(id);
+        }
     }
 
     @Override
@@ -59,6 +71,11 @@ public class ResCrosProjectServiceImpl implements ResCrosProjectService {
         return crossprojectMapper.selectByName(name);
     }
 
+    public List<Crossproject> findAllByStatus(Integer status) {
+        return crossprojectMapper.selectByStatus(status);
+    }
+
+    /*Crosappform*/
     public void saveForm(Crosappform crosappform) {
         crosappformMapper.insert(crosappform);
     }
@@ -66,7 +83,19 @@ public class ResCrosProjectServiceImpl implements ResCrosProjectService {
         return crosappformMapper.selectByPrimaryKey(id);
     }
 
-    public List<Crossproject> findAllByStatus(Integer status) {
-        return crossprojectMapper.selectByStatus(status);
+    /*Crossappfile*/
+    public Crossappfile findByFileId(Integer id) {
+        return crossappfileMapper.selectByPrimaryKey(id);
+    }
+    public void saveFile(Crossappfile file) {
+        crossappfileMapper.insert(file);
+        Crossproject crossproject = crossprojectMapper.selectByPrimaryKey(file.getId());
+        if(crossproject != null) {
+            crossproject.setStatus(3);
+            crossprojectMapper.updateByPrimaryKey(crossproject);
+        }
+    }
+    public void deleteFile(Integer id) {
+        crossappfileMapper.deleteByPrimaryKey(id);
     }
 }

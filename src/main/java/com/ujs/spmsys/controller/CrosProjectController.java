@@ -3,20 +3,31 @@ package com.ujs.spmsys.controller;
 import com.ujs.spmsys.core.Result;
 import com.ujs.spmsys.core.ResultCode;
 import com.ujs.spmsys.entity.Crosappform;
+import com.ujs.spmsys.entity.Crossappfile;
 import com.ujs.spmsys.entity.Crossproject;
 import com.ujs.spmsys.service.impl.ResCrosProjectServiceImpl;
+import java.io.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class CrosProjectController {
 
     @Autowired
     ResCrosProjectServiceImpl resCrosProjectService;
+    private final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @GetMapping("/crosproj")
     @ResponseBody
@@ -103,7 +114,119 @@ public class CrosProjectController {
             result.setMessage("Create crosappform success!");
             return result;
         }
+        logger.info("申请表保存失败");
         result.setCode(ResultCode.FAIL);
         return result;
     }
+    @PutMapping("/crossproj/submit/{id}")
+    @ResponseBody
+    public Result submmitCrosProj(
+            @PathVariable("id") String id
+    ) {
+        Integer projid = Integer.parseInt(id);
+        logger.info("送审项目");
+        Result result = new Result();
+        Crossproject crossproject = resCrosProjectService.findById(projid);
+        if(crossproject != null) {
+            crossproject.setStatus(4);
+            resCrosProjectService.update(crossproject);
+            result.setCode(ResultCode.SUCCESS);
+            result.setData(crossproject);
+            result.setMessage("submit success");
+            return result;
+        }
+        result.setCode(ResultCode.FAIL);
+        return  result;
+    }
+
+    @GetMapping("/crossproj/details/{id}")
+    @ResponseBody
+    public Result getCrosProjDetails(
+            @PathVariable("id") String id
+    ) {
+        Integer projid = Integer.parseInt(id);
+        logger.info("尝试获取项目id" + id);
+        Result result = new Result();
+        if(resCrosProjectService.findByFormId(projid) != null ) {
+            result.setCode(ResultCode.SUCCESS);
+            result.setData(resCrosProjectService.findByFormId(projid));
+            result.setMessage("find details success");
+            return result;
+        }
+        result.setCode(ResultCode.FAIL);
+        return result;
+    }
+
+    @PostMapping("/crossappfile")
+    @ResponseBody
+    public Result upload(@RequestParam("crossappfile") MultipartFile file,
+    @RequestParam("projid") Integer projid) {
+        Result result = new Result();
+        if (file.isEmpty()) {
+            result.setCode(ResultCode.FAIL);
+            return result;
+        }
+
+        // 获取文件名
+        String fileName = file.getOriginalFilename();
+        logger.info("上传的文件名为：" + fileName);
+
+        // 获取文件的后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        logger.info("上传的后缀名为：" + suffixName);
+
+        // 文件上传路径
+        String filePath = "d:/roncoo/education/";
+
+        // 解决中文问题，liunx下中文路径，图片显示问题
+        fileName = UUID.randomUUID() + suffixName;
+
+        File dest = new File(filePath + fileName);
+
+        Crossappfile crossappfile = new Crossappfile();
+        // 检测是否存在目录
+        if (!dest.getParentFile().exists()) {
+            dest.getParentFile().mkdirs();
+        }
+
+        try {
+            file.transferTo(dest);
+            crossappfile.setId(projid);
+            crossappfile.setFilename(fileName);
+            crossappfile.setFilepath(filePath + fileName);
+            resCrosProjectService.saveFile(crossappfile);
+            result.setCode(ResultCode.SUCCESS);
+            result.setData(crossappfile);
+            return result;
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        result.setCode(ResultCode.FAIL);
+        return result;
+    }
+
+    @GetMapping("/crossappfile/{id}")
+//    @ResponseBody
+    public ResponseEntity<FileSystemResource> crossAppFileDown(
+            @PathVariable("id") String fileid
+    ) {
+        Integer id = Integer.parseInt(fileid);
+        Crossappfile crossappfile = resCrosProjectService.findByFileId(id);
+        String filepath = crossappfile.getFilepath();
+        File file = new File(filepath);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Content-Disposition", "attachment; filename=" + crossappfile.getFilename());
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(new FileSystemResource(file));
+    }
+
 }
