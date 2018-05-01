@@ -83,11 +83,14 @@ public class CrosProjectController {
         result.setCode(ResultCode.FAIL);
         return result;
     }
-    @DeleteMapping("/crosproj")
+    @DeleteMapping("/crosproj/{id}")
     @ResponseBody
     public Result deleCrosproj(
-            @RequestParam Integer crosprojid
+//            @RequestParam Integer crosprojid
+            @PathVariable("id") String id
     ) {
+        logger.info("delete project " + id);
+        Integer crosprojid = Integer.parseInt(id);
         Result result = new Result();
         if( resCrosProjectService.findById(crosprojid) != null) {
             resCrosProjectService.deleteById(crosprojid);
