@@ -171,4 +171,7 @@
       select * from crossproject
       where status = #{status}
     </select>
+    <select id="selectAll" resultType="com.ujs.spmsys.entity.Crossproject">
+      select * from crossproject
+    </select>
 </mapper>

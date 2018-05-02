@@ -67,6 +67,18 @@ public class CrosProjectController {
         return result;
     }
 
+    @GetMapping("/crosproj/all")
+    @ResponseBody
+    public Result getCrosprojByStatus() {
+        List projects = new ArrayList<Crossproject>();
+        Result result = new Result();
+        projects=resCrosProjectService.findAll();
+        result.setCode(ResultCode.SUCCESS);
+        result.setData(projects);
+        result.setMessage("Success!");
+        return result;
+    }
+
     @PostMapping("/crosproj")
     @ResponseBody
     public Result createCrosproj(
@@ -83,6 +95,31 @@ public class CrosProjectController {
         result.setCode(ResultCode.FAIL);
         return result;
     }
+
+    //改变项目的状态
+    @PutMapping("/crosproj/{id}/status/{status}")
+    @ResponseBody
+    public Result changeProjStatus(
+            @PathVariable("id") String id,
+            @PathVariable("status") String status
+    ) {
+        logger.info("finish proj" + id );
+        Integer projid = Integer.parseInt(id);
+        Integer projstatus = Integer.parseInt(status);
+        Result result = new Result();
+        if( resCrosProjectService.findById(projid) != null) {
+            Crossproject crossproject = resCrosProjectService.findById(projid);
+            crossproject.setStatus(projstatus);
+            resCrosProjectService.update(crossproject);
+            result.setCode(ResultCode.SUCCESS);
+            result.setData(crossproject);
+            result.setMessage("change status success");
+            return result;
+        }
+        result.setCode(ResultCode.FAIL);
+        return result;
+    }
+
     @DeleteMapping("/crosproj/{id}")
     @ResponseBody
     public Result deleCrosproj(
@@ -121,6 +158,7 @@ public class CrosProjectController {
         result.setCode(ResultCode.FAIL);
         return result;
     }
+
     @PutMapping("/crossproj/submit/{id}")
     @ResponseBody
     public Result submmitCrosProj(
@@ -131,7 +169,7 @@ public class CrosProjectController {
         Result result = new Result();
         Crossproject crossproject = resCrosProjectService.findById(projid);
         if(crossproject != null) {
-            crossproject.setStatus(4);
+            crossproject.setStatus(3);
             resCrosProjectService.update(crossproject);
             result.setCode(ResultCode.SUCCESS);
             result.setData(crossproject);
@@ -141,6 +179,7 @@ public class CrosProjectController {
         result.setCode(ResultCode.FAIL);
         return  result;
     }
+
 
     @GetMapping("/crossproj/details/{id}")
     @ResponseBody

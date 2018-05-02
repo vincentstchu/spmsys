@@ -60,4 +60,6 @@ public interface CrossprojectMapper {
     Crossproject selectByName(String name);
 
     List<Crossproject> selectByStatus(Integer status);
+
+    List<Crossproject> selectAll();
 }
