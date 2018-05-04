@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 public class UserInfoServiceTest {
     @Autowired
     private UserinfoServiceImpl userinfoService;
-    private Userinfo userinfo;
+//    private Userinfo userinfo;
 
 //    @Before
 //    public void before() throws Exception {
@@ -33,8 +33,8 @@ public class UserInfoServiceTest {
 //        userinfo.setEmail("2718904285@qq.com");
 //        userinfo.setJob("professor");
 //    }
-//    @Test
-//    public void insertUserinfo() throws Exception {
-////        userinfoService.save(userinfo);
-//    }
+    @Test
+    public void insertUserinfo() throws Exception {
+        userinfoService.findById(1);
+    }
 }
