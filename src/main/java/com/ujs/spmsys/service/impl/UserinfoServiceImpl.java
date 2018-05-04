@@ -1,6 +1,8 @@
 package com.ujs.spmsys.service.impl;
 
+import com.ujs.spmsys.dao.AccountMapper;
 import com.ujs.spmsys.dao.UserinfoMapper;
+import com.ujs.spmsys.entity.Account;
 import com.ujs.spmsys.entity.Userinfo;
 import com.ujs.spmsys.service.UserinfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,13 @@ import java.util.List;
 public class UserinfoServiceImpl implements UserinfoService {
     @Autowired
     UserinfoMapper userinfoMapper;
+    AccountMapper accountMapper;
 
     @Override
     public void save(Userinfo entity) {
         userinfoMapper.insert(entity);
+        Account a = accountMapper.selectByPrimaryKey(entity.getAccountid());
+        a.setStatus(1);
     }
 
     @Override
