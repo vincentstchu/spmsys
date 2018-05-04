@@ -79,6 +79,25 @@ public class CrosProjectController {
         return result;
     }
 
+    @GetMapping("/crosproj/type/{type}")
+    @ResponseBody
+    public Result getCrosprojByStatus(
+            @PathVariable("type") String type
+    ) {
+        List projects = new ArrayList<Crossproject>();
+//        List projects2 = new ArrayList<Crossproject>();
+        Result result = new Result();
+        Integer t = Integer.parseInt(type);
+        if(t == 2)
+            projects=resCrosProjectService.findAll();
+        else if(t == 0 || t == 1)
+            projects=resCrosProjectService.findAllByType(t);
+        result.setCode(ResultCode.SUCCESS);
+        result.setData(projects);
+        result.setMessage("Success!");
+        return result;
+    }
+
     @PostMapping("/crosproj")
     @ResponseBody
     public Result createCrosproj(

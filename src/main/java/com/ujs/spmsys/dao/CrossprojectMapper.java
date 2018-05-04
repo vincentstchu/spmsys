@@ -61,5 +61,7 @@ public interface CrossprojectMapper {
 
     List<Crossproject> selectByStatus(Integer status);
 
+    List<Crossproject> selectByType(Integer type);
+
     List<Crossproject> selectAll();
 }

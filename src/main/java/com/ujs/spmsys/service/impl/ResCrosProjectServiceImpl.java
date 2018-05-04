@@ -75,6 +75,8 @@ public class ResCrosProjectServiceImpl implements ResCrosProjectService {
         return crossprojectMapper.selectByStatus(status);
     }
 
+    public List<Crossproject> findAllByType(Integer type) {return crossprojectMapper.selectByType(type);}
+
     /*Crosappform*/
     public void saveForm(Crosappform crosappform) {
         crosappformMapper.insert(crosappform);

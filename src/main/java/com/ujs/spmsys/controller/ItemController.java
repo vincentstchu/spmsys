@@ -34,7 +34,10 @@ public class ItemController {
         @RequestParam("itemfile") MultipartFile file,
         @RequestParam("type") Integer type,
         @RequestParam("name") String name,
-        @RequestParam("accountid") Integer accountid
+        @RequestParam("accountid") Integer accountid,
+        @RequestParam("projectid") Integer projectid,
+        @RequestParam("projectname") String projectname,
+        @RequestParam("accountname") String accountname
     ) {
         Result result = new Result();
         if (file.isEmpty()) {
@@ -70,6 +73,9 @@ public class ItemController {
             item.setType(type);
             item.setAccountid(accountid);
             item.setFilepath(filePath + fileName);
+            item.setAccountname(accountname);
+            item.setProjectid(projectid);
+            item.setProjectname(projectname);
             itemService.save(item);
             result.setCode(ResultCode.SUCCESS);
             result.setData(item);

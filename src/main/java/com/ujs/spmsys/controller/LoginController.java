@@ -33,9 +33,9 @@ public class LoginController {
         Result result = new Result();
         if(researcherService.findByName(name)!=null)
             if(researcherService.findByName(name).getPasswd().equals(passwd)) {
-                Researcher reseacher = researcherService.findByName(name);
+                Researcher researcher = researcherService.findByName(name);
                 result.setCode(ResultCode.SUCCESS);
-                result.setData(reseacher);
+                result.setData(researcher);
                 result.setMessage("login successful!");
                 return result;
             }

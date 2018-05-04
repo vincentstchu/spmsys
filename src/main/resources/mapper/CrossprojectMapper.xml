@@ -174,4 +174,8 @@
     <select id="selectAll" resultType="com.ujs.spmsys.entity.Crossproject">
       select * from crossproject
     </select>
+    <select id="selectByType" parameterType="java.lang.Integer" resultType="com.ujs.spmsys.entity.Crossproject">
+      select * from crossproject
+      where type = #{type}
+    </select>
 </mapper>
