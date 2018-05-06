@@ -40,7 +40,7 @@ public class ItemController {
         @RequestParam("accountname") String accountname
     ) {
         Result result = new Result();
-        if (file.isEmpty() || name == "") {
+        if (file.isEmpty() || name.equals("")) {
             result.setCode(ResultCode.FAIL);
             return result;
         }

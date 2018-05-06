@@ -29,6 +29,7 @@ public class UserinfoServiceImpl implements UserinfoService {
         userinfoMapper.insert(entity);
         Account a = accountMapper.selectByPrimaryKey(entity.getAccountid());
         a.setStatus(1);
+        accountMapper.updateByPrimaryKey(a);
     }
 
     @Override
