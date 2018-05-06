@@ -22,6 +22,8 @@ import java.util.List;
 public class UserinfoServiceImpl implements UserinfoService {
     @Autowired
     UserinfoMapper userinfoMapper;
+
+    @Autowired
     AccountMapper accountMapper;
 
     @Override
