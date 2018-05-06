@@ -172,4 +172,8 @@
     <select id="selectAll" resultType="com.ujs.spmsys.entity.Item">
       select * from item
     </select>
+    <select id="selectByProjectid" parameterType="java.lang.Integer" resultType="com.ujs.spmsys.entity.Item">
+      select * from item
+      where projectid = #{projectid}
+    </select>
 </mapper>

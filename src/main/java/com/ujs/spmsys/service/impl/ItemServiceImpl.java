@@ -47,4 +47,6 @@ public class ItemServiceImpl implements ItemService {
     public List<Item> findByAccountid(Integer accouontid) {
         return itemMapper.selectByAccountid(accouontid);
     }
+
+    public List<Item> findByProjectid(Integer projectid) {return itemMapper.selectByProjectid(projectid);}
 }

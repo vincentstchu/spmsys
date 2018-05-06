@@ -40,11 +40,10 @@ public class ItemController {
         @RequestParam("accountname") String accountname
     ) {
         Result result = new Result();
-        if (file.isEmpty()) {
+        if (file.isEmpty() || name == "") {
             result.setCode(ResultCode.FAIL);
             return result;
         }
-
         // 获取文件名
         String fileName = file.getOriginalFilename();
         logger.info("上传的文件名为：" + fileName);
@@ -89,6 +88,7 @@ public class ItemController {
         return result;
     }
 
+    //根据用户id获得item列表
     @GetMapping("/item/{id}")
     @ResponseBody
     public Result getItemById(
@@ -105,6 +105,21 @@ public class ItemController {
         result.setMessage("Fail");
         return result;
     }
+
+    //根据项目id获得item列表
+    @GetMapping("/item/proj/{id}")
+    @ResponseBody
+    public Result getItemByProjid(
+            @PathVariable("id") String id
+    ) {
+        Result result = new Result();
+        result.setCode(ResultCode.SUCCESS);
+        result.setMessage("success");
+        result.setData(itemService.findByProjectid(Integer.parseInt(id)));
+        return result;
+    }
+
+    //根据item的id获取文件
     @GetMapping("/item/file/{id}")
     public ResponseEntity<FileSystemResource> getItemFile(
             @PathVariable("id") String id
@@ -129,6 +144,7 @@ public class ItemController {
                 .body(new FileSystemResource(file));
     }
 
+    //获取所有item
     @GetMapping("/items")
     @ResponseBody
     public Result getItems() {

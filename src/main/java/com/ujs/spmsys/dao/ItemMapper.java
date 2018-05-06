@@ -57,5 +57,7 @@ public interface ItemMapper {
 
     List<Item> selectByAccountid(Integer accountid);
 
+    List<Item> selectByProjectid(Integer projectid);
+
     List<Item> selectAll();
 }
