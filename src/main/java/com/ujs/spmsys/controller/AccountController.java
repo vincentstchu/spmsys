@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+
 /**
  * Project: spmsys
  * Package: com.ujs.spmsys.controller
@@ -69,5 +71,24 @@ public class AccountController {
 //        result.setCode(ResultCode.FAIL);
 //        result.setMessage("error!");
 //        return result;
+    }
+
+    @GetMapping("/getid")
+    @ResponseBody
+    public Result getId(
+            @RequestParam("name") String name
+    ) {
+        logger.info("attemp to get the id of " + name);
+        Result result = new Result();
+        if(accountService.findByName(name)!=null) {
+            result.setCode(ResultCode.SUCCESS);
+            Account account = new Account();
+            account.setId(accountService.findByName(name).getId());
+            result.setData(account);
+            result.setMessage("success");
+            return result;
+        }
+        result.setCode(ResultCode.FAIL);
+        return result;
     }
 }
