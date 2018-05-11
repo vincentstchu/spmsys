@@ -1,5 +1,7 @@
 package com.ujs.spmsys.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.ujs.spmsys.dao.CrosappformMapper;
 import com.ujs.spmsys.dao.CrossappfileMapper;
 import com.ujs.spmsys.dao.CrossprojectMapper;
@@ -51,6 +53,12 @@ public class ResCrosProjectServiceImpl implements ResCrosProjectService {
         return crossprojectMapper.selectAll();
     }
 
+    public Page<Crossproject> findAllP(int pageNum, int pageSize) {
+        Page<Crossproject> page = PageHelper.startPage(pageNum,pageSize);
+        crossprojectMapper.selectAll();
+        return page;
+    }
+
     @Override
     public Crossproject findById(Integer id) {
         return crossprojectMapper.selectByPrimaryKey(id);
@@ -61,10 +69,16 @@ public class ResCrosProjectServiceImpl implements ResCrosProjectService {
         return null;
     }
 
-    @Override
     public List<Crossproject> findAllByAuthorName(String name) {
         return crossprojectMapper.selectByAuthorname(name);
     }
+    //分页
+    public Page<Crossproject> findAllByAuthorNameP(String name, int pageNum, int pageSize) {
+        Page<Crossproject> page = PageHelper.startPage(pageNum, pageSize);
+        crossprojectMapper.selectByAuthorname(name);
+        return page;
+    }
+
 
     @Override
     public Crossproject findAllByName(String name) {
