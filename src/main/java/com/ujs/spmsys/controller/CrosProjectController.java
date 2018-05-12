@@ -1,5 +1,6 @@
 package com.ujs.spmsys.controller;
 
+import com.github.pagehelper.Page;
 import com.ujs.spmsys.core.Result;
 import com.ujs.spmsys.core.ResultCode;
 import com.ujs.spmsys.entity.Crosappform;
@@ -18,9 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 public class CrosProjectController {
@@ -29,6 +28,7 @@ public class CrosProjectController {
     ResCrosProjectServiceImpl resCrosProjectService;
     private final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
+    //获取相应作者的项目列表
     @GetMapping("/crosproj")
     @ResponseBody
     public Result getCrosproj(
@@ -47,6 +47,34 @@ public class CrosProjectController {
         result.setData(ResultCode.FAIL);
         return result;
     }
+
+    //获取相应作者的项目列表
+    @GetMapping("/crosprojP")
+    @ResponseBody
+    public Result getCrosprojPage(
+            @RequestParam(value = "authorname") String authorname,
+            @RequestParam(value = "pageNum") String num,
+            @RequestParam(value = "pageSize") String size
+    ) {
+        Result result = new Result();
+        if(resCrosProjectService.findAllByAuthorName(authorname)!=null)
+        {
+            logger.info("attempt to get the project page: authorname = " + authorname);
+            Integer pageNum = Integer.parseInt(num);
+            Integer pageSize = Integer.parseInt(size);
+            Page<Crossproject> projects = resCrosProjectService.findAllByAuthorNameP(authorname, pageNum, pageSize);
+            Map<String, Object> map = new HashMap<>();
+            map.put("projects", projects);
+            map.put("number", projects.getTotal());
+            result.setCode(ResultCode.SUCCESS);
+            result.setData(projects);
+            result.setMessage("Success!");
+            return result;
+        }
+        result.setData(ResultCode.FAIL);
+        return result;
+    }
+
 
     @GetMapping("/crosproj/status")
     @ResponseBody
@@ -67,6 +95,7 @@ public class CrosProjectController {
         return result;
     }
 
+    //全部项目列表
     @GetMapping("/crosproj/all")
     @ResponseBody
     public Result getCrosprojByStatus() {
@@ -79,21 +108,65 @@ public class CrosProjectController {
         return result;
     }
 
-    @GetMapping("/crosproj/type/{type}")
+    //全部项目列表，分页
+    @GetMapping("/crosprojP/all")
+    @ResponseBody
+    public Result getCrosprojPage(
+            @RequestParam(value = "pageNum") int pageNum,
+            @RequestParam(value = "pageSize") int pageSize
+    ) {
+        Page<Crossproject> projects = resCrosProjectService.findAllP(pageNum, pageSize);
+        Map<String, Object> map = new HashMap<>();
+        map.put("projects", projects);
+        map.put("number", projects.getTotal());
+        Result result = new Result();
+        result.setCode(ResultCode.SUCCESS);
+        result.setData(map);
+        result.setMessage("get all projects (page) success");
+        return result;
+    }
+
+    //获取需要管理员解决的项目列表
+    @GetMapping("/crosprojP/issues")
+    @ResponseBody
+    public Result getIssuesPage(
+            @RequestParam(value = "pageNum") int pageNum,
+            @RequestParam(value = "pageSize") int pageSize
+    ) {
+        logger.info("attemp to get the issues");
+        Page<Crossproject> projects = resCrosProjectService.findIssues(pageNum, pageSize);
+        Map<String, Object> map = new HashMap<>();
+        map.put("projects", projects);
+        map.put("number", projects.getTotal());
+        Result result = new Result();
+        result.setCode(ResultCode.SUCCESS);
+        result.setData(map);
+        result.setMessage("get all issues (page)");
+        return result;
+    }
+
+    //2:所有项目 0:横向项目 1:纵向项目
+    @GetMapping("/crosprojP/type/{type}")
     @ResponseBody
     public Result getCrosprojByStatus(
-            @PathVariable("type") String type
+            @PathVariable("type") String type,
+            @RequestParam(value = "pageNum") int pageNum,
+            @RequestParam(value = "pageSize") int pageSize
     ) {
-        List projects = new ArrayList<Crossproject>();
-//        List projects2 = new ArrayList<Crossproject>();
+        logger.info("get projects type: " + type);
+        Page<Crossproject> projects = new Page<>();
         Result result = new Result();
         Integer t = Integer.parseInt(type);
-        if(t == 2)
-            projects=resCrosProjectService.findAll();
+        if(t == 2) {
+            projects = resCrosProjectService.findAllP(pageNum, pageSize);
+        }
         else if(t == 0 || t == 1)
-            projects=resCrosProjectService.findAllByType(t);
+            projects = resCrosProjectService.findPageByType(t, pageNum, pageSize);
+        Map<String, Object> map = new HashMap<>();
+        map.put("projects", projects);
+        map.put("number", projects.getTotal());
         result.setCode(ResultCode.SUCCESS);
-        result.setData(projects);
+        result.setData(map);
         result.setMessage("Success!");
         return result;
     }
