@@ -178,4 +178,8 @@
       select * from crossproject
       where type = #{type}
     </select>
+    <select id="selectIssues" resultType="com.ujs.spmsys.entity.Crossproject">
+      select * from crossproject
+      where status = 3 or status = 4 or status = 6
+    </select>
 </mapper>
