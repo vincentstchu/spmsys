@@ -37,6 +37,9 @@
       from account
       where accountname = #{accountname}
     </select>
+    <select id="selectAll" resultType="com.ujs.spmsys.entity.Account">
+      select * from account
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--
       WARNING - @mbg.generated

@@ -91,4 +91,34 @@ public class AccountController {
         result.setCode(ResultCode.FAIL);
         return result;
     }
+
+    @GetMapping("/getAll")
+    @ResponseBody
+    public Result getAccounts() {
+        logger.info("attemp to get all accounts");
+        Result result = new Result();
+        result.setCode(ResultCode.SUCCESS);
+        result.setData(accountService.findAll());
+        result.setMessage("success");
+        return result;
+    }
+
+    @GetMapping("/setAdmin")
+    @ResponseBody
+    public Result setAdmin(
+            @RequestParam Integer id,
+            @RequestParam Integer status
+    ) {
+        logger.info("attemp to set admin");
+        Result result = new Result();
+        if(accountService.findById(id)!=null) {
+            Account temp = accountService.findById(id);
+            temp.setStatus(status);
+            accountService.update(temp);
+            result.setCode(ResultCode.SUCCESS);
+            return result;
+        }
+        result.setCode(ResultCode.FAIL);
+        return result;
+    }
 }

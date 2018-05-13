@@ -36,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Account> findAll() {
-        return null;
+        return accountMapper.selectAll();
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.ujs.spmsys.dao;
 import com.ujs.spmsys.entity.Account;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AccountMapper {
     /**
@@ -54,4 +56,6 @@ public interface AccountMapper {
     int updateByPrimaryKey(Account record);
 
     Account selectByAccountname(String accountname);
+
+    List<Account> selectAll();
 }
