@@ -67,7 +67,7 @@ public class CrosProjectController {
             map.put("projects", projects);
             map.put("number", projects.getTotal());
             result.setCode(ResultCode.SUCCESS);
-            result.setData(projects);
+            result.setData(map);
             result.setMessage("Success!");
             return result;
         }
